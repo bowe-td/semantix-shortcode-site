@@ -1,0 +1,39 @@
+function getUrlParamByName(name, url) {
+    if (!url) url = window.location.href
+
+    name = name.replace(/[\[\]]/g, "\\$&")
+
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)")
+    var results = regex.exec(url)
+
+    if (!results) return null
+    if (!results[2]) return ""
+
+    return decodeURIComponent(results[2].replace(/\+/g, " "))
+}
+
+const utm_source = getUrlParamByName("utm_source")
+const utm_medium = getUrlParamByName("utm_medium")
+const utm_campaign = getUrlParamByName("utm_campaign")
+const utm_term = getUrlParamByName("utm_term")
+const utm_content = getUrlParamByName("utm_content")
+
+if (utm_source && utm_medium && utm_campaign && utm_term && utm_content) {
+    let utm_params = ["?utm_source=", utm_source, "&utm_medium=", utm_medium, "&utm_campaign=", utm_campaign, "&utm_term=", utm_campaign, "&utm_content=", utm_campaign].join("")
+
+    const links = Array.from(document.querySelectorAll("a[data-apply-utms]"))
+
+    if (links) {
+        for (let i in links) {
+            if (links.hasOwnProperty(i)) {
+                let link = links[i]
+                let cleanedHref = link
+                    .getAttribute("href")
+                    .replace(/(\?|&)?(utm_source|utm_medium|utm_campaign|utm_term|utm_content)=[^&]+/g, "")
+                    .replace(/(&|\?|=)+$/g, "")
+
+                link.setAttribute("href", cleanedHref + utm_params)
+            }
+        }
+    }
+}

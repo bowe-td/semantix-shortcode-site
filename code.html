@@ -1,46 +1,41 @@
 <script>
-    (function() {
-      function getUrlParamByName(name, url) {
-        if (!url) url = window.location.href;
+    function getUrlParamByName(name, url) {
+        if (!url) url = window.location.href
 
-        name = name.replace(/[\[\]]/g, '\\$&');
+        name = name.replace(/[\[\]]/g, "\\$&")
 
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-        var results = regex.exec(url);
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)")
+        var results = regex.exec(url)
 
-        if (!results) return null;
-        if (!results[2]) return '';
+        if (!results) return null
+        if (!results[2]) return ""
 
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-      }
+        return decodeURIComponent(results[2].replace(/\+/g, " "))
+    }
 
-      var utm_source = getUrlParamByName('utm_source');
-      var utm_medium = getUrlParamByName('utm_medium');
-      var utm_campaign = getUrlParamByName('utm_campaign');
-      var utm_term = getUrlParamByName('utm_term');
-      var utm_content = getUrlParamByName('utm_content');
+    const utm_source = getUrlParamByName("utm_source")
+    const utm_medium = getUrlParamByName("utm_medium")
+    const utm_campaign = getUrlParamByName("utm_campaign")
+    const utm_term = getUrlParamByName("utm_term")
+    const utm_content = getUrlParamByName("utm_content")
 
-      if (utm_source && utm_medium && utm_campaign && utm_term && utm_content) {
-        var utm_params = [
-          '?utm_source=', utm_source,
-          '&utm_medium=', utm_medium,
-          '&utm_campaign=', utm_campaign,
-          '&utm_term=', utm_campaign,
-          '&utm_content=', utm_campaign
-        ].join('');
+    if (utm_source && utm_medium && utm_campaign && utm_term && utm_content) {
+        let utm_params = ["?utm_source=", utm_source, "&utm_medium=", utm_medium, "&utm_campaign=", utm_campaign, "&utm_term=", utm_campaign, "&utm_content=", utm_campaign].join("")
 
-        links = document.querySelectorAll('[data-apply-utms]');
+        const links = Array.from(document.querySelectorAll("a[data-apply-utms]"))
 
-        for (var i in links) {
-          if (links.hasOwnProperty(i)) {
-            var link = links[i];
-            var cleanedHref = link.getAttribute('href')
-                                  .replace(/(\?|&)?(utm_source|utm_medium|utm_campaign|utm_term|utm_content)=[^&]+/g, '')
-                                  .replace(/(&|\?|=)+$/g, '');
+        if (links) {
+            for (let i in links) {
+                if (links.hasOwnProperty(i)) {
+                    let link = links[i]
+                    let cleanedHref = link
+                        .getAttribute("href")
+                        .replace(/(\?|&)?(utm_source|utm_medium|utm_campaign|utm_term|utm_content)=[^&]+/g, "")
+                        .replace(/(&|\?|=)+$/g, "")
 
-            link.setAttribute('href', cleanedHref + utm_params);
-          }
+                    link.setAttribute("href", cleanedHref + utm_params)
+                }
+            }
         }
-      }
-    }());
-  </script>
+    }
+</script>
